@@ -8,20 +8,20 @@ package:
 
 source:
   fn: {{ name }}-{{ version }}.tar.gz
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: {{ sha256 }}
 
 build:
   noarch: python
-  number: 1
+  number: 2
   script: python setup.py install --single-version-externally-managed --record record.txt
 
 requirements:
-  build:
-    - python
+  host:
+    - python {{ python_min }}
     - setuptools
   run:
-    - python
+    - python >={{ python_min }}
     - numpy
     - scipy
 
@@ -32,6 +32,7 @@ test:
     - matplotlib-base
     - scikit-image
     - pyflann  # [not win]
+    - python {{ python_min }}
   commands:
     - python -m unittest pygsp.tests.test_graphs.suite  # [not win]
     - python -m unittest pygsp.tests.test_filters.suite
